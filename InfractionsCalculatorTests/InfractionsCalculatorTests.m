@@ -7,7 +7,9 @@
 //
 
 #import <XCTest/XCTest.h>
-
+#import "SimpleReactor.h"
+#import "Event.h"
+#import "Server.h"
 @interface InfractionsCalculatorTests : XCTestCase
 
 @end
@@ -28,7 +30,11 @@
 
 - (void)testExample
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    
+    Server *s = [[Server alloc] init];
+    
+    [s getInfractionsList];
+    
 }
 
 @end

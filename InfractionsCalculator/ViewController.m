@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "FirstPageViewController.h"
 
 @interface ViewController ()
 
@@ -17,13 +18,51 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	
+    server = [[Server alloc] init];
+    server.delegationListener = self;
+    jurisdictions = [[NSMutableArray alloc] init];
+    
+    [self getJurisdictionsFromServer];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+-(void) getJurisdictionsFromServer{
+    [server getInfractionsList];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [super viewWillAppear:animated];
+}
+
+-(void) didGetJurisdictions:(NSArray *)_jurisdictions withError:(NSString *)error{
+    if(error != nil) {
+        NSLog(@"%@",error);
+    } else{
+        [jurisdictions removeAllObjects];
+        [jurisdictions addObjectsFromArray:_jurisdictions];
+        NSLog(@"Done loading from server");
+        [self showInterface];
+    }
+}
+
+-(void) showInterface{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self performSegueWithIdentifier:@"doneLoading" sender:self];
+    }];
+}
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    NSLog(@"Performing segue");
+    FirstPageViewController *next = [segue destinationViewController];
+    next.jurisdictions = jurisdictions;
 }
 
 @end

@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface ViewController : UIViewController
+#import "Server.h"
+@interface ViewController : UIViewController<ServerProtocol>
+{
+    Server *server;
+    NSMutableArray *jurisdictions;
+}
 
 @end
